@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "tsc && node blackjack.js"
+    "dev": "tsc && node ./jsFiles/blackjack.js"
   },
   "keywords": [],
   "author": "",
