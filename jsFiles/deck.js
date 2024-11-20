@@ -18,7 +18,16 @@ class Deck {
         this.deck = (0, utils_1.shuffleArray)(cardArray);
     }
     dealCards(numOfCards) {
-        return [];
+        let cards = [];
+        for (let i = 0; i < numOfCards; i++) {
+            if (this.deck.length > 0) {
+                const card = this.deck.pop();
+                if (card) {
+                    cards.push(card);
+                }
+            }
+        }
+        return cards;
     }
 }
 exports.Deck = Deck;

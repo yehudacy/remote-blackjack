@@ -6,6 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.shuffleArray = shuffleArray;
 exports.getPlayersBet = getPlayersBet;
 exports.getPlayersDecision = getPlayersDecision;
+exports.getCardsValue = getCardsValue;
+exports.cardsValueToString = cardsValueToString;
 const prompt_sync_1 = __importDefault(require("prompt-sync"));
 const prompt = (0, prompt_sync_1.default)();
 function shuffleArray(array) {
@@ -19,7 +21,7 @@ function getPlayersBet(balance) {
     let isValidBet = false;
     let playersBet = -1;
     while (!isValidBet) {
-        playersBet = parseInt(prompt("Please place your bet! "));
+        playersBet = parseInt(prompt("Please place your bet! $"));
         if (playersBet && playersBet > 0 && playersBet <= balance) {
             isValidBet = true;
             return playersBet;
@@ -39,4 +41,51 @@ function getPlayersDecision() {
         console.log("Invalid decision!!");
     }
     return "hit";
+}
+function getCardsValue(cards) {
+    let totalValue = 0;
+    let aceCount = 0;
+    for (let i = 0; i < cards.length; i++) {
+        const cardValue = getCardValue(cards[i]);
+        if (cardValue === 1) {
+            aceCount++;
+            continue;
+        }
+        totalValue += cardValue;
+    }
+    return calcAceValues(totalValue, aceCount);
+}
+function cardsValueToString(cards, hideSecondCard = false) {
+    let cardsString = ``;
+    if (!hideSecondCard) {
+        for (const card of cards) {
+            cardsString += `${singleCardToString(card)},`;
+        }
+    }
+    else {
+        cardsString += singleCardToString(cards[0]);
+        cardsString += "[hidden]";
+    }
+    return cardsString;
+}
+function getCardValue(card) {
+    const cardValue = card.value;
+    if (cardValue > 10) {
+        return 10;
+    }
+    return cardValue;
+}
+function calcAceValues(totalValue, numOfAces) {
+    let maxAceValue = numOfAces * 11;
+    while (totalValue <= 21) {
+        if (totalValue + maxAceValue <= 21) {
+            return totalValue + maxAceValue;
+        }
+        totalValue++;
+        maxAceValue -= 11;
+    }
+    return totalValue;
+}
+function singleCardToString(card) {
+    return `${card.getName()} ${card.suit}`;
 }
